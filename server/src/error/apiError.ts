@@ -15,8 +15,11 @@ class ApiError extends Error {
   static internal (message: string = 'Internal server error'){
     return new ApiError(500, message)
   }
-  static forbidden (message: string){
+  static forbidden (message: string = 'NO ACCESS'){
     return new ApiError(403, message)
+  }
+  static conflict (message: string){
+    return new ApiError(409, message)
   }
   
 }
