@@ -1,9 +1,10 @@
 import { Router, Request, Response } from "express";
 import userController from '../controllers/userController';
+import authMiddleware from "../middleware/authMiddleware";
 const router = Router();
 
 router.post('/registration', userController.registration)
-router.get('/login', userController.login)
-router.get('/auth', userController.check)
+router.post('/login', userController.login)
+router.get('/auth', authMiddleware, userController.check)
 
 export default router

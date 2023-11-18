@@ -1,5 +1,15 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import Database from "./db";
+import { Role, AuthorizationType } from "./types";
+
+declare global {
+  namespace Express {
+    interface Request {
+      currentUser?: JwtUser
+    }
+  }
+}
+
 
 //USER
 interface TelegramUserAttributes {
@@ -7,7 +17,7 @@ interface TelegramUserAttributes {
   telegramId: string;
   telegramUsername: string;
   name: string;
-  role: string[];
+  role: Role;
   // TelegramUserId: number;
 }
 
@@ -18,8 +28,16 @@ class TelegramUser extends Model<TelegramUserAttributes, UserCreationAttributes>
   public telegramId!: string;
   public telegramUsername!: string;
   public name!: string;
-  public role!: ('ADMIN'| 'USER')[];
+  public role!: Role;
   // public TelegramUserId: number;
+}
+
+interface JwtUser {
+  id: number;
+  username: string;
+  authorizationType: AuthorizationType;
+  TelegramUserId: number;
+  role: Role
 }
 
 //DESKTOP_USER
@@ -27,16 +45,21 @@ interface UserAttributes {
   id: number;
   username: string;
   password: string;
-  authorizationType: 'limit' | 'full';
+  authorizationType: AuthorizationType;
+  TelegramUserId: number;
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
+interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
+  TelegramUserId: number;
+}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
   public id!: number;
   public username!: string;
   public password!: string;
-  public authorizationType!: "limit" | "full";
+  public authorizationType!: 'LIMIT' | 'FULL';
+  public TelegramUserId!: number;
+  public TelegramUser?: TelegramUserAttributes
 }
 
 //BOT
@@ -109,5 +132,5 @@ class Point extends Model<PointAttributes, PointCreationAttributes> implements P
 }
 
 export {
-  TelegramUser, User, UserCreationAttributes, Bot, Group, Order, OrderType, Point
+  TelegramUser, User, UserCreationAttributes, UserAttributes, Bot, Group, Order, OrderType, Point, JwtUser
 }

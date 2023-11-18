@@ -19,7 +19,7 @@ User.init(
     username: { type: DataTypes.STRING(50), unique: true },
     password: { type: DataTypes.STRING },
     authorizationType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'limit' },
-    // TelegramUserId: { type: DataTypes.NUMBER, allowNull: false }
+    TelegramUserId: { type: DataTypes.NUMBER, allowNull: false }
   },
   { timestamps: false, sequelize: Database }
 );

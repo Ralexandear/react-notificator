@@ -12,7 +12,7 @@ class ApiError extends Error {
   static badRequest (message: string){
     return new ApiError(404, message)
   }
-  static internal (message: string = 'Internal server error'){
+  static internal (message: string = 'INTERNAL SERVER ERROR'){
     return new ApiError(500, message)
   }
   static forbidden (message: string = 'NO ACCESS'){
@@ -20,6 +20,9 @@ class ApiError extends Error {
   }
   static conflict (message: string){
     return new ApiError(409, message)
+  }
+  static unauthorized (message: string = 'NOT AUTHORIZED'){
+    return new ApiError(401, message)
   }
   
 }

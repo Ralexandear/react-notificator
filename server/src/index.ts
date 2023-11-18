@@ -1,3 +1,4 @@
+require('dotenv').config('../.env')
 // В вашем основном файле
 import Database from './database/db';
 import * as models from './database/init';
@@ -7,7 +8,8 @@ import { Request, Response } from 'express';
 import router from './routes/index';
 import errorHandlingMiddleware from './middleware/errorHandlingMiddleware';
  
-const PORT = process.env.PORT || 5000;
+const PORT = 3000;
+console.log(process.env.PORT)
 const app = express()
 
 app.use(cors())
