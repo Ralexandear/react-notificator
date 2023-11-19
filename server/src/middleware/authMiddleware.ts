@@ -25,7 +25,6 @@ export default function authMiddleware(req: Request, res: Response, next: NextFu
       typeof decoded === 'object' &&
       decoded.id &&
       decoded.username &&
-      decoded.password &&
       decoded.authorizationType &&
       decoded.TelegramUserId &&
       decoded.role

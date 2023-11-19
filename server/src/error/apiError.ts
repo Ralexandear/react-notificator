@@ -9,7 +9,7 @@ class ApiError extends Error {
     this.status = status;
     this.message = message;
   }
-  static badRequest (message: string){
+  static badRequest (message: string = 'BAD REQUEST'){
     return new ApiError(404, message)
   }
   static internal (message: string = 'INTERNAL SERVER ERROR'){

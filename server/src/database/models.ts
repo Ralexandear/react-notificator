@@ -59,20 +59,29 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public password!: string;
   public authorizationType!: 'LIMIT' | 'FULL';
   public TelegramUserId!: number;
-  public TelegramUser?: TelegramUserAttributes
+  public TelegramUser?: TelegramUser;
+  // public TelegramUser!: TelegramUserAttributes
 }
 
 //BOT
 interface BotAttributes {
   id: number;
+  telegramId: string;
   token: string;
+  UserId?: number;
 }
 
-interface BotCreationAttributes extends Optional<BotAttributes, 'id'> {}
+interface BotCreationAttributes extends Optional<BotAttributes, 'id'> {
+  // UserId: number;
+  // telegramId: string;
+  // token: string;
+}
 
 class Bot extends Model<BotAttributes, BotCreationAttributes> implements BotAttributes {
   public id!: number;
+  public telegramId!: string;
   public token!: string;
+  public UserId!: number;
 }
 
 //GROUP

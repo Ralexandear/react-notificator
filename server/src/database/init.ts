@@ -19,7 +19,7 @@ User.init(
     username: { type: DataTypes.STRING(50), unique: true },
     password: { type: DataTypes.STRING },
     authorizationType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'limit' },
-    TelegramUserId: { type: DataTypes.NUMBER, allowNull: false }
+    TelegramUserId: { type: DataTypes.INTEGER, allowNull: false }
   },
   { timestamps: false, sequelize: Database }
 );
@@ -27,7 +27,9 @@ User.init(
 Bot.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
+    telegramId: { type: DataTypes.STRING, allowNull: false },
     token: { type: DataTypes.STRING, allowNull: false },
+    // DesktopUserId: { type: DataTypes.INTEGER, allowNull: false }
   },
   { timestamps: false, sequelize: Database }
 );
@@ -71,7 +73,7 @@ User.belongsTo(TelegramUser);
 Bot.belongsTo(User);
 
 Group.belongsTo(User);
-Group.hasOne(Bot);
+Bot.hasOne(Group)
 Group.hasMany(Order);
 Group.hasOne(OrderType);
 

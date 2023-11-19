@@ -65,7 +65,6 @@ export default new class UserController {
   async check (req: Request, res: Response, next: NextFunction){
     const {id, username, authorizationType, TelegramUserId, role} = req.currentUser as JwtUser;
     const token = generateJwt(id, username, authorizationType, TelegramUserId, role)
-    console.log('gen')
 
     return res.status(200).json({token})
   }
