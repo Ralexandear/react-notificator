@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import ApiError from "../error/apiError";
 import { JwtUser, Bot } from "../database/models";
 import LightTelegramApi from "../telegramBotAPI";
+import apiResponse from "../response/apiResponse";
 
 export default new class BotController {
   async create(req: Request, res: Response, next: NextFunction){
@@ -20,7 +21,7 @@ export default new class BotController {
       }
 
       const bot = await Bot.create({ telegramId: checkBot.result.id.toString() as string, token: botToken, UserId})
-      return res.status(200).json(bot)
+      return new apiResponse(res).success(bot)
     }
     
     res.status(checkBot.error_code ?? 409).json(checkBot)
@@ -29,7 +30,7 @@ export default new class BotController {
     const { id: UserId } = req.currentUser as JwtUser;
     
     const botList = await Bot.findAll({ where: { UserId } });
-    res.status(200).json(botList)
+    new apiResponse(res).success(botList)
   }
   async delete(req: Request, res: Response, next: NextFunction){
     const { id: UserId } = req.currentUser as JwtUser;
@@ -39,21 +40,18 @@ export default new class BotController {
       return next(ApiError.badRequest())
     }
 
-    // return bot.destroy({
-    //   where: {
-    //     UserId,
-    //     id: botId
-    //   }
-    // }).then()
+    const deleteStatus = await Bot.destroy( {
+      where: {
+        UserId,
+        id: botId    
+      }
+    })
 
-    const bot = await Bot.findOne()
-
-    if (! bot){
-      return next(ApiError.badRequest())
+    if (deleteStatus === 1){
+      return new apiResponse(res).success({message : 'Deleted successfully'});
+    } else if (deleteStatus === 0){
+      return next(ApiError.badRequest('BOT WITH SUCH ID DOES NOT EXIST'))
     }
-
-    
-
   }
 }
 
