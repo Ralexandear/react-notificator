@@ -8,16 +8,16 @@ export default function checkRoleMiddleware (role: 'USER' | 'ADMIN' | 'SUDO'){
     if (req.method === 'OPTIONS') {
       return next();
     }
-    console.log('check')
+
     try {
       if (!req.headers.authorization) {
-        return next(ApiError.unauthorized());
+        return next(ApiError.forbidden());
       }
   
       const [tokenType, token] = req.headers.authorization.split(' ');
   
       if (tokenType !== 'Bearer' || !token) {
-        return next(ApiError.unauthorized());
+        return next(ApiError.forbidden());
       }
 
       const decoded = jwt.verify(token, process.env.SECRET_KEY as string);
@@ -30,7 +30,7 @@ export default function checkRoleMiddleware (role: 'USER' | 'ADMIN' | 'SUDO'){
         decoded.TelegramUserId &&
         decoded.role
       )) {
-        return next(ApiError.unauthorized());
+        return next(ApiError.forbidden());
       }
 
       if (! decoded.role.includes(role) ) {

@@ -29,6 +29,7 @@ Bot.init(
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
     telegramId: { type: DataTypes.STRING, allowNull: false },
     token: { type: DataTypes.STRING, allowNull: false },
+    name: {type: DataTypes.STRING, allowNull: false}
     // DesktopUserId: { type: DataTypes.INTEGER, allowNull: false }
   },
   { timestamps: false, sequelize: Database }
@@ -55,7 +56,7 @@ Order.init(
 OrderType.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
-    name: { type: DataTypes.DATE },
+    name: { type: DataTypes.STRING },
   },
   { timestamps: false, sequelize: Database }
 );
@@ -79,10 +80,8 @@ Group.hasOne(OrderType);
 
 OrderType.hasMany(Order);
 
-Point.hasOne(TelegramUser);
+TelegramUser.hasOne(Point);
 Point.hasMany(Order);
 
-TelegramUser.hasMany(Point);
-TelegramUser.hasMany(OrderType);
-
+User.hasMany(OrderType)
 export { TelegramUser, Bot, Group, Order, OrderType, Point, User };

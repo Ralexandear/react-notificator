@@ -1,10 +1,11 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction } from "express";
 const router = Router();
 import botController from "../controllers/botController";
 import checkRoleMiddleware from "../middleware/checkRoleMiddleware";
+import ApiError from "../error/apiError";
 
-router.post('/create', checkRoleMiddleware('ADMIN'), botController.create)
-router.get('/list', checkRoleMiddleware('ADMIN'), botController.getList)
-router.delete('/delete', checkRoleMiddleware('ADMIN'), botController.delete)
+router.post('/create', botController.create)
+router.get('/list', botController.list)
+router.delete('/delete', botController.delete)
 
 export default router

@@ -8,7 +8,7 @@ import { Request, Response } from 'express';
 import router from './routes/index';
 import errorHandlingMiddleware from './middleware/errorHandlingMiddleware';
  
-const PORT = 3000;
+const PORT = 5003;
 console.log(process.env.PORT)
 const app = express()
 

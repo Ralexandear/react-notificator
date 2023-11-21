@@ -68,6 +68,7 @@ interface BotAttributes {
   id: number;
   telegramId: string;
   token: string;
+  name: string;
   UserId?: number;
 }
 
@@ -81,6 +82,7 @@ class Bot extends Model<BotAttributes, BotCreationAttributes> implements BotAttr
   public id!: number;
   public telegramId!: string;
   public token!: string;
+  public name!: string;
   public UserId!: number;
 }
 
@@ -89,14 +91,18 @@ interface GroupAttributes {
   id: number;
   name?: string;
   telegramId: string;
+  UserId?: number;
 }
 
-interface GroupCreationAttributes extends Optional<GroupAttributes, 'id'> {}
+interface GroupCreationAttributes extends Optional<GroupAttributes, 'id'> {
+  UserId: number;
+}
 
 class Group extends Model<GroupAttributes, GroupCreationAttributes> implements GroupAttributes {
   public id!: number;
   public name?: string;
   public telegramId!: string;
+  // UserId?: number;
 }
 
 //ORDER
@@ -117,14 +123,19 @@ class Order extends Model<OrderAttributes, OrderCreationAttributes> implements O
 //ORDER TYPE
 interface OrderTypeAttributes {
   id: number;
-  name?: Date;
+  name?: string;
+  GroupId?: number;
+  UserId?: number;
 }
 
-interface OrderTypeCreationAttributes extends Optional<OrderTypeAttributes, 'id'> {}
+interface OrderTypeCreationAttributes extends Optional<OrderTypeAttributes, 'id'> {
+  GroupId: number;
+  UserId: number;
+}
 
 class OrderType extends Model<OrderTypeAttributes, OrderTypeCreationAttributes> implements OrderTypeAttributes {
   public id!: number;
-  public name?: Date;
+  public name!: string;
 }
 
 //POINT
