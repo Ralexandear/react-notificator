@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../error/apiError';
 import jwt from 'jsonwebtoken';
-import { JwtUser } from '../database/models';
+import { JwtUser } from '../database/interfaces';
 
 export default function checkRoleMiddleware (role: 'USER' | 'ADMIN' | 'SUDO'){
   return function (req: Request, res: Response, next: NextFunction) {

@@ -1,4 +1,5 @@
-import { TelegramUser, User, Bot, Group, Order, OrderType, Point } from './models'
+//@ts-nocheck
+import { TelegramUser, User, Bot, Group, Order, OrderType, Point, TelegramMessage } from './models'
 import { DataTypes } from 'sequelize';
 import Database from './db';
 
@@ -10,7 +11,12 @@ TelegramUser.init(
     name: { type: DataTypes.STRING },
     role: { type: DataTypes.ARRAY(DataTypes.STRING), defaultValue: ['user'] },
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'telegramUsers',
+    modelName: 'telegramUser',
+  }
 );
 
 User.init(
@@ -21,7 +27,12 @@ User.init(
     authorizationType: { type: DataTypes.STRING, allowNull: false, defaultValue: 'limit' },
     TelegramUserId: { type: DataTypes.INTEGER, allowNull: false }
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'users',
+    modelName: 'user'
+  }
 );
 
 Bot.init(
@@ -32,7 +43,12 @@ Bot.init(
     name: {type: DataTypes.STRING, allowNull: false}
     // DesktopUserId: { type: DataTypes.INTEGER, allowNull: false }
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'bots',
+    modelName: 'bot'
+  }
 );
 
 Group.init(
@@ -41,16 +57,26 @@ Group.init(
     name: { type: DataTypes.STRING },
     telegramId: { type: DataTypes.STRING, allowNull: false },
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'groups',
+    modelName: 'group'
+  }
 );
 
-Order.init(
+Order.init( //@ts-expect-error
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
     datetime: { type: DataTypes.DATE },
     status: { type: DataTypes.STRING },
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'orders',
+    modelName: 'order'
+  }
 );
 
 OrderType.init(
@@ -58,16 +84,39 @@ OrderType.init(
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
     name: { type: DataTypes.STRING },
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'orderTypes',
+    modelName: 'orderType'
+  }
 );
 
 Point.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
-    name: { type: DataTypes.DATE },
+    number: { type: DataTypes.FLOAT },
   },
-  { timestamps: false, sequelize: Database }
+  {
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'points',
+    modelName: 'point'
+  }
 );
+
+TelegramMessage.init(
+  {
+    id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true, allowNull: false },
+    message: { type: DataTypes.JSON }
+  },
+  { 
+    timestamps: false,
+    sequelize: Database,
+    tableName: 'telegramMessages',
+    modelName: 'telegramMessage'
+  }
+)
 
 User.hasMany(Group);
 User.belongsTo(TelegramUser);
@@ -82,6 +131,8 @@ OrderType.hasMany(Order);
 
 TelegramUser.hasOne(Point);
 Point.hasMany(Order);
+TelegramMessage.hasOne(Order)
+User.hasMany(Order)
 
 User.hasMany(OrderType)
 export { TelegramUser, Bot, Group, Order, OrderType, Point, User };

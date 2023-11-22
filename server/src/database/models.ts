@@ -1,56 +1,34 @@
 import { DataTypes, Model, Optional } from "sequelize";
 import Database from "./db";
-import { Role, AuthorizationType } from "./types";
+import {
+  JwtUser,
+  TelegramUserAttributes,
+  TelegramCreationAttributes,
+  UserAttributes,
+  UserCreationAttributes,
+  BotAttributes,
+  BotCreationAttributes,
+  GroupAttributes,
+  GroupCreationAttributes,
+  OrderAttributes,
+  OrderCreationAttributes,
+  OrderTypeAttributes,
+  OrderTypeCreationAttributes,
+  PointAttributes,
+  PointCreationAttributes,
+  TelegramMessageAttributes,
+  TelegramMessageCreationAttributes,
+} from './interfaces'
+import { OrderStatusType, RoleType } from "./types";
 
-declare global {
-  namespace Express {
-    interface Request {
-      currentUser?: JwtUser
-    }
-  }
-}
-
-
-//USER
-interface TelegramUserAttributes {
-  id: number;
-  telegramId: string;
-  telegramUsername: string;
-  name: string;
-  role: Role;
-  // TelegramUserId: number;
-}
-
-interface UserCreationAttributes extends Optional<TelegramUserAttributes, 'id'> {}
 
 class TelegramUser extends Model<TelegramUserAttributes, UserCreationAttributes> implements TelegramUserAttributes {
   public id!: number;
   public telegramId!: string;
   public telegramUsername!: string;
   public name!: string;
-  public role!: Role;
+  public role!: RoleType;
   // public TelegramUserId: number;
-}
-
-interface JwtUser {
-  id: number;
-  username: string;
-  authorizationType: AuthorizationType;
-  TelegramUserId: number;
-  role: Role
-}
-
-//DESKTOP_USER
-interface UserAttributes {
-  id: number;
-  username: string;
-  password: string;
-  authorizationType: AuthorizationType;
-  TelegramUserId: number;
-}
-
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {
-  TelegramUserId: number;
 }
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
@@ -58,24 +36,8 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public username!: string;
   public password!: string;
   public authorizationType!: 'LIMIT' | 'FULL';
-  public TelegramUserId!: number;
-  public TelegramUser?: TelegramUser;
-  // public TelegramUser!: TelegramUserAttributes
-}
-
-//BOT
-interface BotAttributes {
-  id: number;
-  telegramId: string;
-  token: string;
-  name: string;
-  UserId?: number;
-}
-
-interface BotCreationAttributes extends Optional<BotAttributes, 'id'> {
-  // UserId: number;
-  // telegramId: string;
-  // token: string;
+  public telegramUserId!: number;
+  public telegramUser?: TelegramUser; // for joins
 }
 
 class Bot extends Model<BotAttributes, BotCreationAttributes> implements BotAttributes {
@@ -83,74 +45,53 @@ class Bot extends Model<BotAttributes, BotCreationAttributes> implements BotAttr
   public telegramId!: string;
   public token!: string;
   public name!: string;
-  public UserId!: number;
-}
-
-//GROUP
-interface GroupAttributes {
-  id: number;
-  name?: string;
-  telegramId: string;
-  UserId?: number;
-}
-
-interface GroupCreationAttributes extends Optional<GroupAttributes, 'id'> {
-  UserId: number;
+  public userId!: number;
 }
 
 class Group extends Model<GroupAttributes, GroupCreationAttributes> implements GroupAttributes {
   public id!: number;
-  public name?: string;
+  public name!: string;
   public telegramId!: string;
-  // UserId?: number;
+  public userId!: number;
 }
-
-//ORDER
-interface OrderAttributes {
-  id: number;
-  datetime?: Date;
-  status?: string;
-}
-
-interface OrderCreationAttributes extends Optional<OrderAttributes, 'id'> {}
 
 class Order extends Model<OrderAttributes, OrderCreationAttributes> implements OrderAttributes {
   public id!: number;
-  public datetime?: Date;
-  public status?: string;
-}
-
-//ORDER TYPE
-interface OrderTypeAttributes {
-  id: number;
-  name?: string;
-  GroupId?: number;
-  UserId?: number;
-}
-
-interface OrderTypeCreationAttributes extends Optional<OrderTypeAttributes, 'id'> {
-  GroupId: number;
-  UserId: number;
+  public datetime!: Date;
+  public status!: OrderStatusType;
+  public groupId!: number;
+  public pointId!: number;
+  public orderTypeId!: number;
+  public telegramMessageId!: number;
+  public userId!: number;
 }
 
 class OrderType extends Model<OrderTypeAttributes, OrderTypeCreationAttributes> implements OrderTypeAttributes {
   public id!: number;
   public name!: string;
+  public groupId!: number;
+  public userId!: number;
 }
-
-//POINT
-interface PointAttributes {
-  id: number;
-  name?: Date;
-}
-
-interface PointCreationAttributes extends Optional<PointAttributes, 'id'> {}
 
 class Point extends Model<PointAttributes, PointCreationAttributes> implements PointAttributes {
   public id!: number;
-  public name?: Date;
+  public number!: number;
+  public telegramUserId?: number;
+}
+
+class TelegramMessage extends Model<TelegramMessageAttributes, TelegramMessageCreationAttributes> implements TelegramMessageAttributes {
+  public id!: number;
+  public message!: JSON;
+  public telegramUserId!: number;
 }
 
 export {
-  TelegramUser, User, UserCreationAttributes, UserAttributes, Bot, Group, Order, OrderType, Point, JwtUser
+  TelegramUser,
+  TelegramMessage,
+  User,
+  Bot,
+  Group,
+  Order,
+  OrderType,
+  Point,
 }

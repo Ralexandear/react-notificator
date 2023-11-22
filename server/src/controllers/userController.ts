@@ -2,10 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import ApiError from "../error/apiError";
 import bcrypt, { hash } from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {JwtUser, TelegramUser, User, UserCreationAttributes} from '../database/models'
-import { AuthorizationType, Role } from "../database/types";
+import { TelegramUser, User } from '../database/models'
+import { AuthorizationType, RoleType } from "../database/types";
 import { Op } from "sequelize";
 import ApiResponse from "../response/apiResponse";
+import { JwtUser, UserCreationAttributes } from "../database/interfaces";
 
 interface LoginRegistration {
   username?: string;
@@ -14,9 +15,9 @@ interface LoginRegistration {
 }
 
 
-const generateJwt = (id: number, username: string, authorizationType: AuthorizationType, TelegramUserId : number, role: Role) => {
+const generateJwt = (id: number, username: string, authorizationType: AuthorizationType, TelegramuserId : number, role: RoleType) => {
   return jwt.sign(
-    { id, username, authorizationType, TelegramUserId, role },
+    { id, username, authorizationType, TelegramuserId, role },
     process.env.SECRET_KEY as string,
     { expiresIn: '7d' }
   )
@@ -34,8 +35,8 @@ export default new class UserController {
     await login(req, res, next)
   } 
   async check (req: Request, res: Response, next: NextFunction){
-    const {id, username, authorizationType, TelegramUserId, role} = req.currentUser as JwtUser;
-    const token = generateJwt(id, username, authorizationType, TelegramUserId, role)
+    const {id, username, authorizationType, telegramUserId, role} = req.currentUser as JwtUser;
+    const token = generateJwt(id, username, authorizationType, telegramUserId, role)
 
     return res.status(200).json({token})
   }
@@ -78,8 +79,8 @@ async function registration (req: Request, res: Response, next: NextFunction){
     }
 
     const hash = await bcrypt.hash(password, 10);
-    const user = await User.create({username, password: hash, TelegramUserId: tgUser.id} as UserCreationAttributes);
-    const token = generateJwt(user.id, username, user.authorizationType, user.TelegramUserId, tgUser.role)
+    const user = await User.create({username, password: hash, telegramUserId: tgUser.id} as UserCreationAttributes);
+    const token = generateJwt(user.id, username, user.authorizationType, user.telegramUserId, tgUser.role)
   
     return res.status(200).json({token})
   }
@@ -176,11 +177,11 @@ async function login(req: Request, res: Response, next: NextFunction) {
     if (! comparePassword){
       return next(ApiError.badRequest('incorrect password'))
     }
-    if (user.TelegramUser?.role === undefined){
+    if (user.telegramUser?.role === undefined){
       return next(ApiError.internal())
     }
 
-    const token = generateJwt(user.id, username, user.authorizationType, user.TelegramUserId, user.TelegramUser.role);
+    const token = generateJwt(user.id, username, user.authorizationType, user.telegramUserId, user.telegramUser.role);
     return res.status(200).json({token})
   } catch (e) {
     console.error(e)

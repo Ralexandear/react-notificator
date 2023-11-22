@@ -1,20 +1,21 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../error/apiError";
-import { JwtUser, Bot } from "../database/models";
+import { Bot } from "../database/models";
 import LightTelegramApi from "../telegramBotAPI/telegramBotApi";
 import ApiResponse from "../response/apiResponse";
+import { BotAttributes, JwtUser } from "../database/interfaces";
 
 export default new class BotController {
   async create(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser
-    const { token: botToken } : { token :  string | undefined } = req.body;
+    const { id: userId } = req.currentUser as JwtUser
+    const { token } : BotAttributes = req.body;
      
-    if (! (botToken)){
-      return next(ApiError.badRequest('required pararameter "botToken" does not exist'))
+    if (! (token)){
+      return next(ApiError.badRequest('required pararameter "token" does not exist'))
     }
 
     try{
-      const checkBot = await new LightTelegramApi(botToken).getMe(true);
+      const checkBot = await new LightTelegramApi(token).getMe(true);
 
       if ( checkBot.ok ){
         if (! checkBot.result?.id){
@@ -23,9 +24,9 @@ export default new class BotController {
 
         const bot = await Bot.create({
           telegramId: checkBot.result.id.toString(),
-          token: botToken,
+          token,
           name: checkBot.result.first_name,
-          UserId,
+          userId,
         })
 
         return new ApiResponse(res).success(bot)
@@ -38,10 +39,10 @@ export default new class BotController {
     }
   }
   async list (req: Request, res: Response, next: NextFunction) {
-    const { id: UserId } = req.currentUser as JwtUser;
+    const { id: userId } = req.currentUser as JwtUser;
 
     try{
-      const botList = await Bot.findAll({ where: { UserId } });
+      const botList = await Bot.findAll({ where: { userId } });
       new ApiResponse(res).success(botList)
     } catch (e) {
       console.error(e)
@@ -49,18 +50,18 @@ export default new class BotController {
     }
   }
   async delete(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
-    const { id: botId } = req.body;
+    const { id: userId } = req.currentUser as JwtUser;
+    const { id } = req.body; // botId
 
-    if (! botId){
+    if (! id){
       return next(ApiError.badRequest())
     }
 
     try{
       const deleteStatus = await Bot.destroy( {
         where: {
-          UserId,
-          id: botId    
+          userId,
+          id    
         }
       })
 

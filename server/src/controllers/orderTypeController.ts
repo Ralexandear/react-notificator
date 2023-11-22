@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import ApiError from "../error/apiError";
-import { JwtUser, OrderType } from "../database/models"
+import { OrderType } from "../database/models"
 import ApiResponse from "../response/apiResponse";
+import { JwtUser } from "../database/interfaces";
 
 
 interface OrderTypeBody {
@@ -13,7 +14,7 @@ interface OrderTypeBody {
 
 export default new class OrderTypeController {
   async create(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
+    const { id: userId } = req.currentUser as JwtUser;
     const { name, groupId } : OrderTypeBody = req.body;
 
     if (! (name && groupId)){
@@ -23,13 +24,13 @@ export default new class OrderTypeController {
     try{
       const [user, created] = await OrderType.findOrCreate({
         where: {
-          UserId,
-          GroupId: groupId
+          userId,
+          groupId: groupId
         },
         defaults: {
           name,
-          UserId,
-          GroupId: groupId
+          userId,
+          groupId: groupId
         }
       });
   
@@ -43,10 +44,10 @@ export default new class OrderTypeController {
     }    
   }
   async list(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
+    const { id: userId } = req.currentUser as JwtUser;
     
     try{
-      const orderTypeList = await OrderType.findAll({ where: { UserId } });
+      const orderTypeList = await OrderType.findAll({ where: { userId } });
       new ApiResponse(res).success(orderTypeList)
     } catch (e) {
       console.error(e)
@@ -54,18 +55,18 @@ export default new class OrderTypeController {
     }    
   }
   async edit(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
-    const { id: orderTypeId, groupId, name } : OrderTypeBody = req.body;
+    const { id: userId } = req.currentUser as JwtUser;
+    const { id, groupId, name } : OrderTypeBody = req.body;
 
     if (! (groupId && name )){
       return next(ApiError.badRequest(`ONE OF REQUIRED PARAMETER IS MISSING, CHECK PARAMETERS: 'id', 'name'`))
     }
 
     try{
-      const result = (await OrderType.update( { name, GroupId: groupId }, {
+      const result = (await OrderType.update( { name, groupId: groupId }, {
         where: {
-          UserId,
-          id: orderTypeId
+          userId,
+          id
         },
         limit: 1
       }))[0];
@@ -81,18 +82,18 @@ export default new class OrderTypeController {
     
   }
   async delete(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
-    const { id: orderTypeId } : OrderTypeBody = req.body;
+    const { id: userId } = req.currentUser as JwtUser;
+    const { id } : OrderTypeBody = req.body;
 
-    if (! orderTypeId){
+    if (! id){
       return next(ApiError.badRequest())
     }
 
     try{
       const result = await OrderType.destroy( {
         where: {
-          UserId,
-          id: orderTypeId    
+          userId,
+          id    
         }
       })
 

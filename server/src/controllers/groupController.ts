@@ -1,31 +1,37 @@
 import { NextFunction, Request, Response } from "express";
-import { Bot, Group, JwtUser } from "../database/models";
+import { Bot, Group } from "../database/models";
 import ApiError from "../error/apiError";
 import ApiResponse from "../response/apiResponse";
+import { GroupAttributes, JwtUser } from "../database/interfaces";
 
-interface GroupBody {
-  id : string,
-  name: string,
-  telegramId: string
-} 
 
 export default new class GroupController {
   async create(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
-    const { id: groupId, name} : GroupBody = req.body;
+    const { id: userId } = req.currentUser as JwtUser;
+    const { telegramId, name} : GroupAttributes = req.body;
     
-    if (! (groupId && name)){
+    if (! (telegramId && name)){
       return next(ApiError.badRequest())
     }
 
     try{
-      const checkGroup = await Group.findOne( { where: { telegramId: groupId, UserId } });
+
+      const [group, created] = await Group.findOrCreate({
+        where: {
+          telegramId,
+          userId
+        },
+        defaults: {
+          telegramId,
+          userId,
+          name
+        }
+      });
     
-      if (checkGroup){
-        return next(ApiError.badRequest(`This group is already exists, group name ${checkGroup.name}`))
+      if (! created){
+        return next(ApiError.badRequest(`This group is already exists, group name ${group.name}`))
       };
 
-      const group = await Group.create({telegramId: groupId, name, UserId});
       new ApiResponse(res).success(group)
     } catch (e) {
       console.error(e)
@@ -33,10 +39,10 @@ export default new class GroupController {
     }
   }
   async list(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
+    const { id: userId } = req.currentUser as JwtUser;
     
     try{
-      const groupList = await Group.findAll({ where: { UserId } });
+      const groupList = await Group.findAll({ where: { userId } });
       new ApiResponse(res).success(groupList)
     } catch (e) {
       console.error(e)
@@ -44,18 +50,18 @@ export default new class GroupController {
     }
   }
   async edit(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
-    const { id: groupId, name, telegramId } : GroupBody = req.body;
+    const { id: userId } = req.currentUser as JwtUser;
+    const { id , name, telegramId } : GroupAttributes = req.body;
 
-    if (! (groupId && name && telegramId)){
+    if (! (id && name && telegramId)){
       return next(ApiError.badRequest(`ONE OF REQUIRED PARAMETER IS MISSING, CHECK PARAMETERS: 'id', 'name', 'telegramId'`))
     }
 
     try{
       const result = (await Group.update({name, telegramId}, {
         where: {
-          UserId,
-          id: groupId
+          userId,
+          id
         },
         limit: 1
       }))[0];
@@ -70,18 +76,18 @@ export default new class GroupController {
     }
   }
   async delete(req: Request, res: Response, next: NextFunction){
-    const { id: UserId } = req.currentUser as JwtUser;
-    const { id: groupId } : GroupBody = req.body;
+    const { id: userId } = req.currentUser as JwtUser;
+    const { id } : GroupAttributes = req.body; // groupId
 
-    if (! groupId){
+    if (! id){
       return next(ApiError.badRequest())
     }
 
     try{
       const result = await Bot.destroy( {
         where: {
-          UserId,
-          id: groupId    
+          userId,
+          id    
         }
       })
 

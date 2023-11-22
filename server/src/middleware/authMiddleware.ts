@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import ApiError from '../error/apiError';
 import jwt, { JwtPayload } from 'jsonwebtoken';
-import { JwtUser } from '../database/models';
+import { JwtUser } from '../database/interfaces';
 
 export default function authMiddleware(req: Request, res: Response, next: NextFunction) {
   if (req.method === 'OPTIONS') {
