@@ -1,0 +1,71 @@
+@import './_variables'
+
+$greenBasic: #61c358
+$greenSecondary: #87b651
+
+:active, :hover, :focus
+  outline: 0 !important
+  outline-offset: 0 !important
+  box-shadow: none !important
+
+.btn
+  &-green
+    width: 100%
+    border-color: $greenBasic
+    background: $greenBasic
+    color: white !important
+    border: none !important
+    outline: none
+
+    &:hover
+      background: $greenSecondary
+
+    &:active
+      border-color: green
+      background: $greenBasic !important
+
+  &-outline-green
+    --bs-btn-color: #2e2e2e
+    --bs-btn-border-color: #87b651
+    --bs-btn-hover-color: #fff
+    --bs-btn-hover-bg: #87b651
+    --bs-btn-hover-border-color: #61c358
+    --bs-btn-focus-shadow-rgb: 25,135,84
+    --bs-btn-active-color: #fff
+    --bs-btn-active-bg: #61c358
+    --bs-btn-active-border-color: #61c358
+    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125)
+    --bs-btn-disabled-color: #61c358
+    --bs-btn-disabled-bg: transparent
+    --bs-btn-disabled-border-color: #61c358
+    --bs-gradient: none
+  
+  &-sendMessage
+
+    // border: 1px!important
+    // border-color: $greenBasic!important
+
+    // &:hover
+    //   // color: #fff
+    //   border: 1px!important
+    //   border-color: $greenSecondary!important
+    //   // background: $greenSecondary
+
+    // &:active
+    //   color: #fff !important
+    //   background: white!important
+    //   border-color: $greenSecondary !important
+
+    // &.active
+    //   background: $greenBasic
+    //   color: white !important
+// @media (min-width: 992px) 
+//   .navbar-collapse 
+    // display: none !important
+  
+
+  // .navbar-toggler
+  //   display: block !important
+  
+
+
