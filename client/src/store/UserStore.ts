@@ -1,6 +1,9 @@
 import { makeAutoObservable } from "mobx";
 
 export default class UserStore {
+  private _isAuth: boolean;
+  private _username: string | undefined;
+  
   constructor () {
     this._isAuth = false;
     this._username = 'Ralexandear'
@@ -8,9 +11,6 @@ export default class UserStore {
   }
   setAuth(bool) {
     this._isAuth = bool
-  }
-  setUser(user){
-    this._user = user
   }
   get isAuth() {
     return this._isAuth

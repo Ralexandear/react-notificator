@@ -1,8 +1,9 @@
-import { AUTH_ROUTE, LOGIN_ROUTE, DASHBOARD_ROUTE, REGISTRATION_ROUTE, SETTINGS_ROUTE } from "./utils/consts"
-import Auth from './pages/Auth'
-import OrderForm from "./pages/Dashboard"
-import Settings from "./pages/Settings"
-import Dashboard from "./pages/Dashboard"
+import { AUTH_ROUTE, LOGIN_ROUTE, DASHBOARD_ROUTE, REGISTRATION_ROUTE, SETTINGS_ROUTE } from "./utils/consts.ts"
+
+import Auth from './pages/Auth.tsx'
+import OrderForm from "./pages/Dashboard.tsx"
+import Settings from "./pages/Settings.tsx"
+import Dashboard from "./pages/Dashboard.tsx"
 
 export const authRoutes = [
   {

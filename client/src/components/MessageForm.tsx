@@ -7,6 +7,7 @@ const MessageForm = () => {
 
   useEffect(() => {
     if (buttonRef.current) {
+      //@ts-expect-error
       const buttonHeight = buttonRef.current.getBoundingClientRect().height;
       const mb3Height = 16; // Пример высоты mb-3 (можете подставить свое значение)
 

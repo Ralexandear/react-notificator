@@ -1,16 +1,21 @@
 import { observer } from 'mobx-react-lite';
 import { useContext } from 'react';
-import { Context } from "../index";
-
 import { Button, Container, Form, Nav, Navbar, Offcanvas, Row} from 'react-bootstrap'
+
+
+import { Context } from "../index.tsx";
+
 import NavDropdown from 'react-bootstrap/NavDropdown';
-import OrderTabs from './OrderTabs';
+import OrderTabs from './OrderTabs.tsx';
 
 import './styles/navbar.sass'
+import React from 'react';
 
 const NavBar = observer(() => {
+  //@ts-expect-error
   const { user } = useContext(Context);
   return (
+    <>
     <Navbar key="false" expand="false" className="bg-body-tertiary mb-3">
       <Container >
         <Navbar.Brand href="/">
@@ -49,6 +54,8 @@ const NavBar = observer(() => {
         </Row>
       </Container>
     </Navbar>
+
+  </>
   );
 })
 

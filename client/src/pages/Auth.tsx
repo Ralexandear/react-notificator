@@ -1,13 +1,17 @@
 import React, { useContext } from 'react'
 import '../styles/_main.sass'
 import { Container, Form, InputGroup, Button } from 'react-bootstrap'
-import { Context } from '..';
+import { Context } from '../index.tsx';
 import { Navigate } from 'react-router-dom';
 
-const Auth = () => {
-  const { user } = useContext(Context);
+import UserStore from '../store/UserStore.ts';
 
-  if (user.isAuth) { // Если пользователь авторизован, перенаправляем на другую страницу
+const Auth = () => {
+  //@ts-expect-error
+  const { user } : { user: UserStore | null } = useContext(Context);
+  
+
+  if (user && user.isAuth) { // Если пользователь авторизован, перенаправляем на другую страницу
     return <Navigate to="/dashboard" />;
   }
 
@@ -23,7 +27,7 @@ const Auth = () => {
       <Container
         style={{
           padding: '15px',
-          'border-radius': '10px',
+          borderRadius: '10px',
           background: 'white',
           maxWidth: '400px',
           // height: '100%'
@@ -42,9 +46,9 @@ const Auth = () => {
             style={{
               height: '25vh',
               width: '35vw',
-              'min-height': '100px',
-              'max-height': '250px',
-              'min-width': '100px'
+              minHeight: '100px',
+              maxHeight: '250px',
+              minWidth: '100px'
             }}
             src="/icons/notificatorLoginLogo.svg" alt="logo"
           />
@@ -69,7 +73,7 @@ const Auth = () => {
             </InputGroup>
             <Button
               variant='green'
-              className='mb-3'
+              className='mb-3 w-100'
               size='lg'
               style={{borderRadius: '30px'}}
             >
@@ -78,7 +82,7 @@ const Auth = () => {
           </div>
         </div>
         <div>
-          <p style={{"text-align": "center"}}>Developed by Ralexandear</p>
+          <p style={{ textAlign: "center" }}>Developed by Ralexandear</p>
         </div>
       </div>          
       </Container>

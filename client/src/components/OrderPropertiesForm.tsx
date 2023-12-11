@@ -1,6 +1,5 @@
 import React from 'react'
 import { Container } from 'react-bootstrap'
-import RightSidebarMenu from './RightSidebarMenu'
 
 const OrderPropertiesForm = () => {
   return (
