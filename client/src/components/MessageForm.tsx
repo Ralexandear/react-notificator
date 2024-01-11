@@ -27,7 +27,7 @@ const MessageForm = () => {
           className='mb-3'
           as="textarea"
           placeholder="Текст сообщения"
-          style={{ resize: 'none', height: totalHeight }}
+          style={{ resize: 'none', height: totalHeight, minWidth: '250px'}}
         />
         <Button
           ref={buttonRef}

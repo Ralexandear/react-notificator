@@ -2,13 +2,15 @@ import React, { useContext } from 'react'
 import '../styles/_main.sass'
 import { Container, Form, InputGroup, Button } from 'react-bootstrap'
 import { Context } from '../index.tsx';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
+// const navigate = useNavigate;
 
 import UserStore from '../store/UserStore.ts';
+import { observer } from 'mobx-react-lite';
 
-const Auth = () => {
-  //@ts-expect-error
-  const { user } : { user: UserStore | null } = useContext(Context);
+const Auth = observer (() => {
+  const { user } = useContext(Context);
+  // const navigate = useNavigate()
   
 
   if (user && user.isAuth) { // Если пользователь авторизован, перенаправляем на другую страницу
@@ -76,6 +78,9 @@ const Auth = () => {
               className='mb-3 w-100'
               size='lg'
               style={{borderRadius: '30px'}}
+              onClick={() => {
+                user.setAuth(true);
+              }}
             >
             Войти
             </Button>
@@ -88,6 +93,6 @@ const Auth = () => {
       </Container>
     </div>
   )
-}
+});
 
 export default Auth

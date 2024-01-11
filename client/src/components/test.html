@@ -3,26 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-  <title>Responsive Navbar Example</title>
   <style>
-    .navbar {
+    .flex-item {
       display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      width: 100%;
+      margin-bottom: 10px;
     }
-    .navbar-item {
-      margin-bottom: 10px; /* Добавляем немного отступа между блоками на узких экранах */
+
+    /* Медиазапрос: изменять стили для экранов шириной менее 768px */
+    @media (max-width: 768px) {
+      .flex-item {
+        display: block; /* Переключение на блочный режим для вывода в колонке */
+      }
     }
   </style>
 </head>
 <body>
-
-<nav class="navbar bg-light p-3">
-  <div class="navbar-item">Div 1</div>
-  <div class="navbar-item">Div 2</div>
-  <div class="navbar-item">Div 3</div>
-</nav>
-
+  <div>
+    <div class="flex-item">Ваш контент 1</div>
+    <div class="flex-item">Ваш контент 2</div>
+    <!-- Добавьте другие элементы, если необходимо -->
+  </div>
 </body>
 </html>

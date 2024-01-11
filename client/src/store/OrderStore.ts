@@ -1,6 +1,6 @@
 import { makeAutoObservable } from "mobx";
 
-type OrderType = 'antigen' | 'scooter';
+export type OrderType = 'antigen' | 'scooter';
 
 export default class OrderStore {
   private _isReady: boolean;
@@ -13,7 +13,7 @@ export default class OrderStore {
   configureReadyness (bool: boolean) {
     this._isReady = bool;
   }
-  setOrderTyoe (orderType: OrderType){
+  setOrderType (orderType: OrderType){
     this._orderType = orderType;
   }
   get isReady() {

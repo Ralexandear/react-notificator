@@ -1,16 +1,25 @@
-import React from "react";
-import { Container, Form } from "react-bootstrap";
-import MessageForm from "../components/MessageForm";
-import OrderPropertiesForm from "../components/OrderPropertiesForm";
+import React, { useContext } from "react";
+import { Container, Form, Row } from "react-bootstrap";
+import MessageForm from "../components/MessageForm.tsx";
+import OrderPropertiesForm from "../components/OrderPropertiesForm.tsx";
+import { Context } from "../index.tsx";
 
 const Dashboard = () => {
+  const { user } = useContext(Context);
+  console.log('dash')
+
   return (
     <Container>
       <Form
         className="d-flex"
       >
-        {/* <OrderPropertiesForm />
-        <MessageForm />   */}
+       
+      {/* <div
+        className="grid"
+      > */}
+        <OrderPropertiesForm />
+        <MessageForm />   
+      {/* </div> */}
       </Form>
       
     </Container>

@@ -6,11 +6,13 @@ import { AUTH_ROUTE, LOGIN_ROUTE } from "../utils/consts.ts";
 import Auth from "../pages/Auth.tsx";
 import { Context } from "../index.tsx";
 import NavBar from "./Navbar.tsx";
+import { observer } from "mobx-react-lite";
 
-const AppRouter = () => {
-  //@ts-expect-error
-  const { user } = useContext(Context);
+const AppRouter = observer(() => {
+  const { user, order } = useContext(Context);
   console.log(user)
+  console.log(order)
+
   // user.setAuth(true)
 
   return (
@@ -30,6 +32,6 @@ const AppRouter = () => {
       </Routes>
     </>
   );
-};
+});
 
 export default AppRouter

@@ -12,7 +12,6 @@ import './styles/navbar.sass'
 import React from 'react';
 
 const NavBar = observer(() => {
-  //@ts-expect-error
   const { user } = useContext(Context);
   return (
     <>

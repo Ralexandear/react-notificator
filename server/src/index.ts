@@ -45,7 +45,3 @@ async function start() {
     console.error(error);
   }
 }
-
-
-
-start()

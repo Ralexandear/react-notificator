@@ -1,23 +1,23 @@
 import React, { createContext } from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import App from './App.tsx';
 import './styles/global.sass';
-
 import UserStore from './store/UserStore.ts';
 import OrderStore from './store/OrderStore.ts';
 
-interface ContextProps {
+export interface ContextProps {
   user: UserStore;
   order: OrderStore;
 }
 
-export const Context = createContext<ContextProps | null>(null);
+export const Context = createContext<ContextProps>({
+  user: new UserStore(),
+  order: new OrderStore()
+});
 
-const rootElement = document.getElementById('root') ?? document.body;
+const rootElement = document.getElementById('root');
 
-const root = ReactDOM.createRoot(rootElement);
-
-root.render(
+ReactDOM.createRoot(rootElement).render(
   <Context.Provider value={{
     user: new UserStore(),
     order: new OrderStore()

@@ -1,11 +1,22 @@
 import React from 'react'
-import { Container } from 'react-bootstrap'
+import { Button, Container, FloatingLabel, Form } from 'react-bootstrap'
 
 const OrderPropertiesForm = () => {
   return (
     <Container
       className='order_form'
     >
+      <FloatingLabel
+        label="Текст сообщения"
+      >
+        <Form.Control
+          className='mb-3'
+          as="textarea"
+          placeholder="Текст сообщения"
+          // style={{ resize: 'none', height: totalHeight, minWidth: '250px'}}
+        />
+      </FloatingLabel>
+
       <div className="item form-floating mb-3">
         <input className="form-control" list="clientNameList" id="clientNameInput" placeholder=""/>
         <label for="clientNameInput">Название клиента</label>
